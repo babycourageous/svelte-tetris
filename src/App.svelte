@@ -1,3 +1,7 @@
+<script>
+  import Tetris from './containers/Tetris.svelte'
+</script>
+
 <svelte:head>
   <link
     href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
@@ -17,28 +21,15 @@
     }
   </style>
 </svelte:head>
+
 <main>
-  <h1>Svelte Tetris!</h1>
+  <Tetris />
 </main>
 
 <style>
   main {
-    text-align: center;
-    padding: 1em;
-    max-width: 240px;
-    margin: 0 auto;
-  }
-
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-
-  @media (min-width: 640px) {
-    main {
-      max-width: none;
-    }
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
   }
 </style>
