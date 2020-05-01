@@ -1,4 +1,6 @@
 <script>
+  import { setContext } from 'svelte'
+
   // components
   import Statistics from './Statistics.svelte'
   import Lines from './Lines.svelte'
@@ -8,12 +10,16 @@
   import Level from './Level.svelte'
 
   // constants and data
-  import { COLS, ROWS, BLOCK_SIZE } from '../constants.js'
+  import { COLS, ROWS, BLOCK_SIZE, TETRIS } from '../constants.js'
+  import tetrominos from '../tetrominos.js'
 
   // stores
   import board from '../stores/board.js'
+  import currentPiece from '../stores/currentPiece.js'
 
-  console.table($board)
+  // initialize context
+  currentPiece.setCurrentPiece(tetrominos[1])
+  setContext(TETRIS, { currentPiece, board })
 
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
