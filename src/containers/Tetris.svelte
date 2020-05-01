@@ -37,6 +37,9 @@
   let animationID
   let lastRightMove = 0
   let lastLeftMove = 0
+  let lastDownMove = 0
+  // time since the piece last moved down automatically
+  let timeSincePieceLastFell = 0
 
   /**
    * Returns a random piece from the tetromino matrix.
@@ -65,6 +68,8 @@
       currentTime - lastLeftMove > playerSidewaysThreshold
     const isRightMovementAllowed =
       currentTime - lastRightMove > playerSidewaysThreshold
+    const isDownMovementAllowed =
+      currentTime - lastDownMove > Math.ceil(1000 / PLAYER_DOWN_RATE)
 
     // handle key presses
     if (pressed.some(...LEFT_KEYS)) {
@@ -86,7 +91,14 @@
     }
 
     if (pressed.some(...DOWN_KEYS)) {
-      console.log('DOWN is pressed')
+      if (isDownMovementAllowed) {
+        lastDownMove = currentTime
+        timeSincePieceLastFell = 0
+
+        currentPiece.movePieceDown()
+      }
+    } else {
+      lastDownMove = 0
     }
   }
 

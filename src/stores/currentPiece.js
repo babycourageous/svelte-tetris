@@ -22,6 +22,14 @@ function createCurrentPiece(initialPiece) {
         return newPiece
       })
     },
+    movePieceDown(board) {
+      update(prevPiece => {
+        const newPiece = klona(prevPiece)
+        newPiece.y += 1
+        return newPiece
+      })
+    },
+
   }
 }
 
