@@ -13,13 +13,14 @@
 
   const { currentPiece, board } = getContext(TETRIS)
 
+  $: $currentPiece && drawCanvas()
+
   function drawCanvas() {
     canvasHelper.drawGame(ctx, $board, $currentPiece)
   }
 
   onMount(() => {
     ctx = canvas.getContext('2d')
-    drawCanvas()
   })
 </script>
 

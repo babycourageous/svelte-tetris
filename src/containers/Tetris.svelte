@@ -1,5 +1,5 @@
 <script>
-  import { setContext } from 'svelte'
+  import { setContext, onMount } from 'svelte'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -18,7 +18,6 @@
   import currentPiece from '../stores/currentPiece.js'
 
   // initialize context
-  currentPiece.setCurrentPiece(getRandomPiece())
   setContext(TETRIS, { currentPiece, board })
 
   const canvasWidth = COLS * BLOCK_SIZE
@@ -33,6 +32,16 @@
     const i = Math.floor(Math.random() * l)
     return tetrominos[i]
   }
+
+  function resetGame() {
+    // initialize stores
+    currentPiece.setCurrentPiece(getRandomPiece())
+  }
+
+  onMount(() => {
+    // reset values
+    resetGame()
+  })
 </script>
 
 <div class="game">
