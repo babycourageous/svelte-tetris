@@ -18,11 +18,21 @@
   import currentPiece from '../stores/currentPiece.js'
 
   // initialize context
-  currentPiece.setCurrentPiece(tetrominos[1])
+  currentPiece.setCurrentPiece(getRandomPiece())
   setContext(TETRIS, { currentPiece, board })
 
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
+
+  /**
+   * Returns a random piece from the tetromino matrix.
+   * @returns {Object} The piece object
+   */
+  function getRandomPiece() {
+    const l = tetrominos.length
+    const i = Math.floor(Math.random() * l)
+    return tetrominos[i]
+  }
 </script>
 
 <div class="game">
