@@ -1,5 +1,6 @@
 <script>
   import { setContext, onMount } from 'svelte'
+  import pressed from 'pressed'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -10,7 +11,17 @@
   import Level from './Level.svelte'
 
   // constants and data
-  import { COLS, ROWS, BLOCK_SIZE, TETRIS } from '../constants.js'
+  import {
+    TETRIS,
+    COLS,
+    ROWS,
+    BLOCK_SIZE,
+    DOWN_KEYS,
+    LEFT_KEYS,
+    RIGHT_KEYS,
+    PLAYER_SIDEWAYS_RATE,
+    PLAYER_DOWN_RATE,
+  } from '../constants.js'
   import tetrominos from '../tetrominos.js'
 
   // stores
@@ -22,6 +33,13 @@
 
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
+
+  let animationID
+  let lastRightMove = 0
+  let lastLeftMove = 0
+  let lastDownMove = 0
+  // time since the piece last moved down automatically
+  let timeSincePieceLastFell = 0
 
   /**
    * Returns a random piece from the tetromino matrix.
@@ -38,9 +56,61 @@
     currentPiece.setCurrentPiece(getRandomPiece())
   }
 
+  function animate(currentTime) {
+    handlePlayerMovement(currentTime)
+    animationID = requestAnimationFrame(animate)
+  }
+
+  function handlePlayerMovement(currentTime) {
+    // Calculate whether movement is allowed
+    const playerSidewaysThreshold = Math.ceil(1000 / PLAYER_SIDEWAYS_RATE)
+    const isLeftMovementAllowed =
+      currentTime - lastLeftMove > playerSidewaysThreshold
+    const isRightMovementAllowed =
+      currentTime - lastRightMove > playerSidewaysThreshold
+    const isDownMovementAllowed =
+      currentTime - lastDownMove > Math.ceil(1000 / PLAYER_DOWN_RATE)
+
+    // handle key presses
+    if (pressed.some(...LEFT_KEYS)) {
+      if (isLeftMovementAllowed) {
+        lastLeftMove = currentTime
+        currentPiece.movePieceLeft($board)
+      }
+    } else {
+      lastLeftMove = 0
+    }
+
+    if (pressed.some(...RIGHT_KEYS)) {
+      if (isRightMovementAllowed) {
+        lastRightMove = currentTime
+        currentPiece.movePieceRight($board)
+      }
+    } else {
+      lastRightMove = 0
+    }
+
+    if (pressed.some(...DOWN_KEYS)) {
+      if (isDownMovementAllowed) {
+        lastDownMove = currentTime
+        timeSincePieceLastFell = 0
+
+        currentPiece.movePieceDown()
+      }
+    } else {
+      lastDownMove = 0
+    }
+  }
+
   onMount(() => {
+    // Initialize pressed utility for tracking key presses
+    pressed.start(window)
+
     // reset values
     resetGame()
+
+    // Start the update loop
+    animationID = requestAnimationFrame(animate)
   })
 </script>
 
