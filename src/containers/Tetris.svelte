@@ -10,6 +10,11 @@
   // constants and data
   import { COLS, ROWS, BLOCK_SIZE } from '../constants.js'
 
+  // stores
+  import board from '../stores/board.js'
+
+  console.table($board)
+
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
 </script>
