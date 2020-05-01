@@ -96,7 +96,7 @@ function aboveFloor(y) {
  * @returns {Boolean} True if there is nothing (0) in that spot, false if it is occupied
  */
 function notOccupied(x, y, board) {
-  return board[y] && board[y][x] === 0
+  return y < 0 || board[y] && board[y][x] === 0
 }
 
 /**
