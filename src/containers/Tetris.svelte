@@ -4,7 +4,7 @@
   import klona from 'klona'
 
   // helpers
-  import { detectMatrixCollision } from '../matrixHelpers'
+  import { detectMatrixCollision, getFilledRows } from '../matrixHelpers'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -96,6 +96,20 @@
     board.mergePieceIntoBoard(previousPositionPiece)
   }
 
+  /**
+   * Removes and scores completed lines in the board.
+   */
+  function clearCompletedLines() {
+    const filledRows = getFilledRows($board)
+    const numberOfClearedLines = filledRows ? filledRows.length : 0
+
+    if (numberOfClearedLines > 0) {
+      // TODO: update score
+      // TODO: update lines
+      board.clearCompletedLines()
+    }
+  }
+
   function animate(currentTime) {
     let deltaTime = currentTime - lastFrameTime
     lastFrameTime = currentTime
@@ -106,6 +120,8 @@
     // check collision on each paint
     if (detectMatrixCollision($currentPiece, $board)) {
       mergeCurrentPieceIntoBoard()
+      clearCompletedLines()
+
       const piece = centerPiece(getRandomPiece(piece))
       currentPiece.setCurrentPiece(piece)
 

@@ -1,6 +1,11 @@
 import { writable } from 'svelte/store'
 
-import { createEmptyMatrix, combineMatrices } from '../matrixHelpers'
+import {
+  createEmptyMatrix,
+  combineMatrices,
+  getFilledRows,
+  removeRowAndShiftDown,
+} from '../matrixHelpers'
 import { COLS, ROWS } from '../constants'
 
 const initialState = createEmptyMatrix(COLS, ROWS)
@@ -19,6 +24,16 @@ function createBoard(initialBoard) {
         return mergedBoard
       })
     },
+    clearCompletedLines() {
+      update(prevBoard => {
+        const filledRows = getFilledRows(prevBoard)
+
+        return filledRows.reduce(
+          (board, rowIndex) => removeRowAndShiftDown(board, rowIndex),
+          prevBoard
+        )
+      })
+    }
   }
 }
 
