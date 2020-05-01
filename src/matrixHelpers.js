@@ -1,3 +1,5 @@
+import klona from 'klona'
+
 import { inRange, times, constant, partial, lessThan } from './utils'
 import { COLS, ROWS } from './constants'
 
@@ -36,8 +38,12 @@ const createEmptyArray = length => times(length, constant(0))
  * @param {Array} board The board matrix
  * @returns {Boolean} True if there is a collision, false if not
  */
-function detectMatrixCollision(piece, board) {
-  if (inBounds(piece, board)) {
+function detectMatrixCollision(piece, board, xOffset = 0, yOffset = 0) {
+  const temp = klona(piece)
+  temp.x += xOffset
+  temp.y += yOffset
+
+  if (inBounds(temp, board)) {
     return false
   }
   return true
@@ -127,6 +133,37 @@ function combineMatrices(
   return newMatrix
 }
 
+function flip(matrix) {
+  const h = matrix.length
+  const w = matrix[0].length
+
+  let newMatrix = createEmptyMatrix(h, w)
+
+  times(h, row => {
+    times(w, column => {
+      newMatrix[column][row] = matrix[row][column]
+    })
+  })
+  return newMatrix
+}
+
+const mirror = matrix => matrix.map(row => row.reverse())
+
+const rotateRight = matrix => {
+  return mirror(flip(matrix))
+}
+
+const rotateLeft = matrix => {
+  return flip(matrix).reverse()
+}
+
+function rotate(matrix, direction) {
+  if (direction && direction <= 0) {
+    return rotateLeft(matrix)
+  }
+  return rotateRight(matrix)
+}
+
 export {
   getMatrixHeight,
   getMatrixWidth,
@@ -134,4 +171,5 @@ export {
   createEmptyArray,
   detectMatrixCollision,
   combineMatrices,
+  rotate,
 }

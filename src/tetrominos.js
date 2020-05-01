@@ -61,6 +61,7 @@ function createPiece(name, color, matrix) {
     matrix,
     x: 0,
     y: 0,
+    rotation: 0
   }
 }
 
