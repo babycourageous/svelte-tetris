@@ -23,6 +23,8 @@
     DOWN_KEYS,
     LEFT_KEYS,
     RIGHT_KEYS,
+    ROTATE_LEFT_KEYS,
+    ROTATE_RIGHT_KEYS,
     PLAYER_SIDEWAYS_RATE,
     PLAYER_DOWN_RATE,
   } from '../constants.js'
@@ -42,6 +44,7 @@
   let lastRightMove = 0
   let lastLeftMove = 0
   let lastDownMove = 0
+  let lastRotate = 0
   // time since the piece last moved down automatically
   let timeSincePieceLastFell = 0
 
@@ -112,6 +115,7 @@
       currentTime - lastRightMove > playerSidewaysThreshold
     const isDownMovementAllowed =
       currentTime - lastDownMove > Math.ceil(1000 / PLAYER_DOWN_RATE)
+    const isRotateAllowed = currentTime - lastRotate > playerSidewaysThreshold
 
     // handle key presses
     if (pressed.some(...LEFT_KEYS)) {
@@ -141,6 +145,20 @@
       }
     } else {
       lastDownMove = 0
+    }
+
+    if (pressed.some(...ROTATE_LEFT_KEYS, ...ROTATE_RIGHT_KEYS)) {
+      if (isRotateAllowed) {
+        lastRotate = currentTime
+        if (pressed.some(...ROTATE_LEFT_KEYS)) {
+          currentPiece.rotateCurrentPiece($board, -1)
+        }
+        if (pressed.some(...ROTATE_RIGHT_KEYS)) {
+          currentPiece.rotateCurrentPiece($board)
+        }
+      }
+    } else {
+      lastRotate = 0
     }
   }
 

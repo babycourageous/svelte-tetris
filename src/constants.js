@@ -6,6 +6,8 @@ export const TETRIS = {}
 export const DOWN_KEYS = ['down']
 export const LEFT_KEYS = ['left']
 export const RIGHT_KEYS = ['right']
+export const ROTATE_LEFT_KEYS = ['ctl', 'z']
+export const ROTATE_RIGHT_KEYS = ['up', 'x']
 
 export const PLAYER_SIDEWAYS_RATE = 6
 export const PLAYER_DOWN_RATE = 20
