@@ -33,7 +33,10 @@
   // stores
   import board from '../stores/board.js'
   import currentPiece from '../stores/currentPiece.js'
+  import lines from '../stores/lines.js'
   import { fallRate } from '../stores/fallRate.js'
+
+  $: console.log($lines)
 
   // initialize context
   setContext(TETRIS, { currentPiece, board })
@@ -105,7 +108,7 @@
 
     if (numberOfClearedLines > 0) {
       // TODO: update score
-      // TODO: update lines
+      lines.setLines($lines + numberOfClearedLines)
       board.clearCompletedLines()
     }
   }
