@@ -1,7 +1,18 @@
 import { writable } from 'svelte/store'
 import klona from 'klona'
 
+import { detectMatrixCollision } from '../matrixHelpers'
+
 const initialState = null
+
+function moveAndCheck(piece, board, direction) {
+  const newPiece = klona(piece)
+  newPiece.x += direction
+  if (detectMatrixCollision(newPiece, board)) {
+    return piece
+  }
+  return newPiece
+}
 
 function createCurrentPiece(initialPiece) {
   const { set, update, subscribe } = writable()
@@ -9,19 +20,12 @@ function createCurrentPiece(initialPiece) {
     subscribe,
     setCurrentPiece: piece => set(piece),
     movePieceLeft(board) {
-      update(prevPiece => {
-        const newPiece = klona(prevPiece)
-        newPiece.x -= 1
-        return newPiece
-      })
+      update(prevPiece => moveAndCheck(prevPiece, board, -1))
     },
     movePieceRight(board) {
-      update(prevPiece => {
-        const newPiece = klona(prevPiece)
-        newPiece.x += 1
-        return newPiece
-      })
+      update(prevPiece => moveAndCheck(prevPiece, board, 1))
     },
+
     movePieceDown(board) {
       update(prevPiece => {
         const newPiece = klona(prevPiece)
