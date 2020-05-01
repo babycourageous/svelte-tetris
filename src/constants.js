@@ -2,6 +2,10 @@
 // key for Svelte context
 export const TETRIS = {}
 
+// Levels
+export const START_LEVEL = 0
+export const NEW_LEVEL_EVERY = 10
+
 // Key mappings
 export const DOWN_KEYS = ['down']
 export const LEFT_KEYS = ['left']
