@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store'
+import klona from 'klona'
 
 const initialState = null
 
@@ -7,6 +8,20 @@ function createCurrentPiece(initialPiece) {
   return {
     subscribe,
     setCurrentPiece: piece => set(piece),
+    movePieceLeft(board) {
+      update(prevPiece => {
+        const newPiece = klona(prevPiece)
+        newPiece.x -= 1
+        return newPiece
+      })
+    },
+    movePieceRight(board) {
+      update(prevPiece => {
+        const newPiece = klona(prevPiece)
+        newPiece.x += 1
+        return newPiece
+      })
+    },
   }
 }
 

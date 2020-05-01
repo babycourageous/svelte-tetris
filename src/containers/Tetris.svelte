@@ -70,7 +70,7 @@
     if (pressed.some(...LEFT_KEYS)) {
       if (isLeftMovementAllowed) {
         lastLeftMove = currentTime
-        console.log('LEFT pressed')
+        currentPiece.movePieceLeft($board)
       }
     } else {
       lastLeftMove = 0
@@ -79,7 +79,7 @@
     if (pressed.some(...RIGHT_KEYS)) {
       if (isRightMovementAllowed) {
         lastRightMove = currentTime
-        console.log('RIGHT pressed')
+        currentPiece.movePieceRight($board)
       }
     } else {
       lastRightMove = 0
