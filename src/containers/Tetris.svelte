@@ -33,6 +33,7 @@
   // stores
   import board from '../stores/board.js'
   import currentPiece from '../stores/currentPiece.js'
+  import { fallRate } from '../stores/fallRate.js'
 
   // initialize context
   setContext(TETRIS, { currentPiece, board })
@@ -47,6 +48,7 @@
   let lastRotate = 0
   // time since the piece last moved down automatically
   let timeSincePieceLastFell = 0
+  let lastFrameTime = 0 // previous frame's current time
 
   /**
    * Returns a random piece from the tetromino matrix.
@@ -69,6 +71,13 @@
   }
 
   function resetGame() {
+    // reset timers
+    timeSincePieceLastFell = 0
+    lastFrameTime = 0
+
+    // reset game objects
+    board.resetBoard()
+
     // initialize stores
     const piece = centerPiece(getRandomPiece())
     currentPiece.setCurrentPiece(piece)
@@ -88,7 +97,11 @@
   }
 
   function animate(currentTime) {
+    let deltaTime = currentTime - lastFrameTime
+    lastFrameTime = currentTime
+
     handlePlayerMovement(currentTime)
+    handleAutomatedFalling(deltaTime)
 
     // check collision on each paint
     if (detectMatrixCollision($currentPiece, $board)) {
@@ -159,6 +172,17 @@
       }
     } else {
       lastRotate = 0
+    }
+  }
+
+  function handleAutomatedFalling(deltaTime) {
+    timeSincePieceLastFell += deltaTime
+
+    const shouldPieceFall = timeSincePieceLastFell > Math.ceil(1000 / $fallRate)
+
+    if (shouldPieceFall) {
+      timeSincePieceLastFell = 0
+      currentPiece.movePieceDown()
     }
   }
 
