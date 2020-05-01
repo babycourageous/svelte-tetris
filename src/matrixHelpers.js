@@ -1,6 +1,9 @@
 import { inRange, times, constant, partial, lessThan } from './utils'
 import { COLS, ROWS } from './constants'
 
+const getMatrixHeight = matrix => matrix.length
+const getMatrixWidth = matrix => matrix[0].length
+
 /**
  * Create a matrix of "0"s given the number of columns and rows
  *
@@ -90,4 +93,45 @@ function notOccupied(x, y, board) {
   return board[y] && board[y][x] === 0
 }
 
-export { createEmptyMatrix, createEmptyArray, detectMatrixCollision }
+/**
+ * Combines two matrixes (a board and a piece) and returns the new matrix
+ *
+ * @param {Array} destinationMatrix The board matrix
+ * @param {Array} sourceMatrix The piece matrix
+ * @param {number} [offsetX=0] The x location of the piece
+ * @param {number} [offsetY=0] The y location of the piece
+ * @param {boolean} [overwrite=true] Whether to overwrite the board matrix
+ * @returns {Array} The new board matrix with merged piece
+ */
+function combineMatrices(
+  destinationMatrix,
+  sourceMatrix,
+  offsetX = 0,
+  offsetY = 0,
+  overwrite = true
+) {
+  const lastXIndex = getMatrixWidth(sourceMatrix) + offsetX - 1
+  const lastYIndex = getMatrixHeight(sourceMatrix) + offsetY - 1
+
+  const newMatrix = destinationMatrix.map((rows, y) => {
+    return rows.map((value, x) => {
+      if (inRange(x, offsetX, lastXIndex + 1) && inRange(y, offsetY, lastYIndex + 1)) {
+        if (overwrite || !value) {
+          return sourceMatrix[y - offsetY][x - offsetX]
+        }
+      }
+      return value
+    })
+  })
+
+  return newMatrix
+}
+
+export {
+  getMatrixHeight,
+  getMatrixWidth,
+  createEmptyMatrix,
+  createEmptyArray,
+  detectMatrixCollision,
+  combineMatrices,
+}

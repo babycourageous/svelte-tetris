@@ -1,6 +1,10 @@
 <script>
   import { setContext, onMount } from 'svelte'
   import pressed from 'pressed'
+  import klona from 'klona'
+
+  // helpers
+  import { detectMatrixCollision } from '../matrixHelpers'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -56,8 +60,34 @@
     currentPiece.setCurrentPiece(getRandomPiece())
   }
 
+  /**
+   * Affixes the current piece to the board.
+   */
+  function mergeCurrentPieceIntoBoard() {
+    // First moves the piece up one space.
+    // This allows you to shift the piece around a bit and
+    // only detects collisions at the end of the step
+    // instead of at the beginning.
+    const previousPositionPiece = klona($currentPiece)
+    previousPositionPiece.y -= 1
+    board.mergePieceIntoBoard(previousPositionPiece)
+  }
+
   function animate(currentTime) {
     handlePlayerMovement(currentTime)
+
+    // check collision on each paint
+    if (detectMatrixCollision($currentPiece, $board)) {
+      mergeCurrentPieceIntoBoard()
+      currentPiece.setCurrentPiece(getRandomPiece())
+
+      // If there is still a collision right after a new piece is spawned, the game ends.
+      if (detectMatrixCollision($currentPiece, $board)) {
+        console.error('Game over!')
+        return
+      }
+    }
+
     animationID = requestAnimationFrame(animate)
   }
 
