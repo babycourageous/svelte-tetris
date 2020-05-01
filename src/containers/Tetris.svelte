@@ -1,4 +1,6 @@
 <script>
+  import { setContext, onMount } from 'svelte'
+
   // components
   import Statistics from './Statistics.svelte'
   import Lines from './Lines.svelte'
@@ -6,6 +8,40 @@
   import Score from './Score.svelte'
   import NextPiece from './NextPiece.svelte'
   import Level from './Level.svelte'
+
+  // constants and data
+  import { COLS, ROWS, BLOCK_SIZE, TETRIS } from '../constants.js'
+  import tetrominos from '../tetrominos.js'
+
+  // stores
+  import board from '../stores/board.js'
+  import currentPiece from '../stores/currentPiece.js'
+
+  // initialize context
+  setContext(TETRIS, { currentPiece, board })
+
+  const canvasWidth = COLS * BLOCK_SIZE
+  const canvasHeight = ROWS * BLOCK_SIZE
+
+  /**
+   * Returns a random piece from the tetromino matrix.
+   * @returns {Object} The piece object
+   */
+  function getRandomPiece() {
+    const l = tetrominos.length
+    const i = Math.floor(Math.random() * l)
+    return tetrominos[i]
+  }
+
+  function resetGame() {
+    // initialize stores
+    currentPiece.setCurrentPiece(getRandomPiece())
+  }
+
+  onMount(() => {
+    // reset values
+    resetGame()
+  })
 </script>
 
 <div class="game">
@@ -16,7 +52,7 @@
 
   <section>
     <Lines />
-    <Board />
+    <Board width={canvasWidth} height={canvasHeight} />
   </section>
 
   <section class="meta">
