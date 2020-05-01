@@ -133,6 +133,29 @@ function combineMatrices(
   return newMatrix
 }
 
+function getFilledRows(matrix) {
+  return matrix.reduce((filledRows, row, rowIndex) => {
+    // check that every element in the row is a filled block
+    if (row.every(i => lessThan(0, i))) {
+      filledRows.push(rowIndex)
+    }
+    return filledRows
+  }, [])
+}
+
+function removeRow(matrix, rowIndex) {
+  const klone = klona(matrix)
+  klone.splice(rowIndex, 1)
+  return klone
+}
+
+function removeRowAndShiftDown(matrix, rowIndex) {
+  const w = getMatrixWidth(matrix)
+  const emptyRowMatrix = [createEmptyArray(w)]
+  const newBoard = emptyRowMatrix.concat(removeRow(matrix, rowIndex))
+  return newBoard
+}
+
 function flip(matrix) {
   const h = matrix.length
   const w = matrix[0].length
@@ -172,4 +195,7 @@ export {
   detectMatrixCollision,
   combineMatrices,
   rotate,
+  getFilledRows,
+  removeRow,
+  removeRowAndShiftDown,
 }
