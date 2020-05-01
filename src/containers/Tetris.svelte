@@ -6,6 +6,12 @@
   import Score from './Score.svelte'
   import NextPiece from './NextPiece.svelte'
   import Level from './Level.svelte'
+
+  // constants and data
+  import { COLS, ROWS, BLOCK_SIZE } from '../constants.js'
+
+  const canvasWidth = COLS * BLOCK_SIZE
+  const canvasHeight = ROWS * BLOCK_SIZE
 </script>
 
 <div class="game">
@@ -16,7 +22,7 @@
 
   <section>
     <Lines />
-    <Board />
+    <Board width={canvasWidth} height={canvasHeight} />
   </section>
 
   <section class="meta">

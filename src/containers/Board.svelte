@@ -1,7 +1,10 @@
 <script>
   import Display from '../components/Display.svelte'
+
+  export let width
+  export let height
 </script>
 
 <Display>
-  <h2>Board</h2>
+  <canvas {width} {height} />
 </Display>
