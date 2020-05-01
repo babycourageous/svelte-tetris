@@ -19,6 +19,8 @@
     DOWN_KEYS,
     LEFT_KEYS,
     RIGHT_KEYS,
+    PLAYER_SIDEWAYS_RATE,
+    PLAYER_DOWN_RATE,
   } from '../constants.js'
   import tetrominos from '../tetrominos.js'
 
@@ -33,6 +35,8 @@
   const canvasHeight = ROWS * BLOCK_SIZE
 
   let animationID
+  let lastRightMove = 0
+  let lastLeftMove = 0
 
   /**
    * Returns a random piece from the tetromino matrix.
@@ -55,13 +59,30 @@
   }
 
   function handlePlayerMovement(currentTime) {
+    // Calculate whether movement is allowed
+    const playerSidewaysThreshold = Math.ceil(1000 / PLAYER_SIDEWAYS_RATE)
+    const isLeftMovementAllowed =
+      currentTime - lastLeftMove > playerSidewaysThreshold
+    const isRightMovementAllowed =
+      currentTime - lastRightMove > playerSidewaysThreshold
+
     // handle key presses
     if (pressed.some(...LEFT_KEYS)) {
-      console.log('LEFT is pressed')
+      if (isLeftMovementAllowed) {
+        lastLeftMove = currentTime
+        console.log('LEFT pressed')
+      }
+    } else {
+      lastLeftMove = 0
     }
 
     if (pressed.some(...RIGHT_KEYS)) {
-      console.log('RIGHT is pressed')
+      if (isRightMovementAllowed) {
+        lastRightMove = currentTime
+        console.log('RIGHT pressed')
+      }
+    } else {
+      lastRightMove = 0
     }
 
     if (pressed.some(...DOWN_KEYS)) {
