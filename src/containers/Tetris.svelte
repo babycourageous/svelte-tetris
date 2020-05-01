@@ -4,7 +4,7 @@
   import klona from 'klona'
 
   // helpers
-  import { detectMatrixCollision } from '../matrixHelpers'
+  import { detectMatrixCollision, getFilledRows } from '../matrixHelpers'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -33,7 +33,10 @@
   // stores
   import board from '../stores/board.js'
   import currentPiece from '../stores/currentPiece.js'
+  import lines from '../stores/lines.js'
   import { fallRate } from '../stores/fallRate.js'
+
+  $: console.log($lines)
 
   // initialize context
   setContext(TETRIS, { currentPiece, board })
@@ -96,6 +99,20 @@
     board.mergePieceIntoBoard(previousPositionPiece)
   }
 
+  /**
+   * Removes and scores completed lines in the board.
+   */
+  function clearCompletedLines() {
+    const filledRows = getFilledRows($board)
+    const numberOfClearedLines = filledRows ? filledRows.length : 0
+
+    if (numberOfClearedLines > 0) {
+      // TODO: update score
+      lines.setLines($lines + numberOfClearedLines)
+      board.clearCompletedLines()
+    }
+  }
+
   function animate(currentTime) {
     let deltaTime = currentTime - lastFrameTime
     lastFrameTime = currentTime
@@ -106,6 +123,8 @@
     // check collision on each paint
     if (detectMatrixCollision($currentPiece, $board)) {
       mergeCurrentPieceIntoBoard()
+      clearCompletedLines()
+
       const piece = centerPiece(getRandomPiece(piece))
       currentPiece.setCurrentPiece(piece)
 
