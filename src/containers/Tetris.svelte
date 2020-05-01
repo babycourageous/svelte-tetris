@@ -55,9 +55,20 @@
     return tetrominos[i]
   }
 
+  /**
+   * Positions a piece in the center of the board.
+   * @returns a copy of the input piece
+   */
+  function centerPiece(piece) {
+    piece.x = Math.floor((COLS - piece.matrix[0].length) / 2)
+    piece.y = piece.name === 'I' ? -1 : 0
+    return piece
+  }
+
   function resetGame() {
     // initialize stores
-    currentPiece.setCurrentPiece(getRandomPiece())
+    const piece = centerPiece(getRandomPiece())
+    currentPiece.setCurrentPiece(piece)
   }
 
   /**
@@ -79,7 +90,8 @@
     // check collision on each paint
     if (detectMatrixCollision($currentPiece, $board)) {
       mergeCurrentPieceIntoBoard()
-      currentPiece.setCurrentPiece(getRandomPiece())
+      const piece = centerPiece(getRandomPiece(piece))
+      currentPiece.setCurrentPiece(piece)
 
       // If there is still a collision right after a new piece is spawned, the game ends.
       if (detectMatrixCollision($currentPiece, $board)) {
