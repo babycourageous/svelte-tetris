@@ -35,14 +35,17 @@
   import currentPiece from '../stores/currentPiece.js'
   import lines from '../stores/lines.js'
   import { fallRate } from '../stores/fallRate.js'
+  import nextPiece from '../stores/nextPiece.js'
 
-  $: console.log($lines)
+  $: console.log('lines: ', $lines)
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board })
+  setContext(TETRIS, { currentPiece, board, nextPiece })
 
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
+  const nextWidth = 4 * BLOCK_SIZE
+  const nextHeight = 4 * BLOCK_SIZE
 
   let animationID
   let lastRightMove = 0
@@ -52,6 +55,15 @@
   // time since the piece last moved down automatically
   let timeSincePieceLastFell = 0
   let lastFrameTime = 0 // previous frame's current time
+
+  function randomizeNextPiece() {
+    nextPiece.setNextPiece(getRandomPiece())
+  }
+
+  function makeNextPieceCurrent() {
+    const spawnedPiece = centerPiece($nextPiece)
+    currentPiece.setCurrentPiece(spawnedPiece)
+  }
 
   /**
    * Returns a random piece from the tetromino matrix.
@@ -68,9 +80,10 @@
    * @returns a copy of the input piece
    */
   function centerPiece(piece) {
-    piece.x = Math.floor((COLS - piece.matrix[0].length) / 2)
-    piece.y = piece.name === 'I' ? -1 : 0
-    return piece
+    const klonedPiece = klona(piece)
+    klonedPiece.x = Math.floor((COLS - klonedPiece.matrix[0].length) / 2)
+    klonedPiece.y = klonedPiece.name === 'I' ? -1 : 0
+    return klonedPiece
   }
 
   function resetGame() {
@@ -81,9 +94,10 @@
     // reset game objects
     board.resetBoard()
 
-    // initialize stores
-    const piece = centerPiece(getRandomPiece())
-    currentPiece.setCurrentPiece(piece)
+    // initialize pieces
+    randomizeNextPiece()
+    makeNextPieceCurrent()
+    randomizeNextPiece()
   }
 
   /**
@@ -125,8 +139,8 @@
       mergeCurrentPieceIntoBoard()
       clearCompletedLines()
 
-      const piece = centerPiece(getRandomPiece(piece))
-      currentPiece.setCurrentPiece(piece)
+      makeNextPieceCurrent()
+      randomizeNextPiece()
 
       // If there is still a collision right after a new piece is spawned, the game ends.
       if (detectMatrixCollision($currentPiece, $board)) {
@@ -232,7 +246,7 @@
     <!-- SCORE -->
     <Score />
     <!-- NEXT PIECE -->
-    <NextPiece />
+    <NextPiece width={nextWidth} height={nextHeight} />
     <!-- LEVEL -->
     <Level />
   </section>
