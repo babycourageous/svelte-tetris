@@ -5,6 +5,7 @@
 
   // helpers
   import { detectMatrixCollision, getFilledRows } from '../matrixHelpers'
+  import { times, shuffle } from '../utils'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -42,6 +43,7 @@
   // initialize context
   setContext(TETRIS, { currentPiece, board, nextPiece })
 
+  // local variables
   const canvasWidth = COLS * BLOCK_SIZE
   const canvasHeight = ROWS * BLOCK_SIZE
   const nextWidth = 4 * BLOCK_SIZE
@@ -55,24 +57,29 @@
   // time since the piece last moved down automatically
   let timeSincePieceLastFell = 0
   let lastFrameTime = 0 // previous frame's current time
+  let bag = []
+
+  function createBag() {
+    // make a bag
+    bag = klona(tetrominos)
+    // shuffle pieces
+    shuffle(bag)
+  }
 
   function randomizeNextPiece() {
-    nextPiece.setNextPiece(getRandomPiece())
+    // if there are no pieces in the bag
+    if (bag.length === 0) {
+      // create a new bag
+      createBag()
+    }
+    // grab next piece
+    const piece = bag.pop()
+    nextPiece.setNextPiece(piece)
   }
 
   function makeNextPieceCurrent() {
     const spawnedPiece = centerPiece($nextPiece)
     currentPiece.setCurrentPiece(spawnedPiece)
-  }
-
-  /**
-   * Returns a random piece from the tetromino matrix.
-   * @returns {Object} The piece object
-   */
-  function getRandomPiece() {
-    const l = tetrominos.length
-    const i = Math.floor(Math.random() * l)
-    return tetrominos[i]
   }
 
   /**
