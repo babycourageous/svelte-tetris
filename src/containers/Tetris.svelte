@@ -37,11 +37,10 @@
   import lines from '../stores/lines.js'
   import { fallRate } from '../stores/fallRate.js'
   import nextPiece from '../stores/nextPiece.js'
-
-  $: console.log('lines: ', $lines)
+  import { level } from '../stores/level.js'
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board, nextPiece })
+  setContext(TETRIS, { currentPiece, board, nextPiece, level })
 
   // local variables
   const canvasWidth = COLS * BLOCK_SIZE
