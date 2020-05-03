@@ -20,6 +20,7 @@
       .padEnd(spacePadStart, ' ')
       .padStart(displayLength, ' ')
   }
+
   $: display = padLevel($level)
 </script>
 
