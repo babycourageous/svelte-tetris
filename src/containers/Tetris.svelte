@@ -38,9 +38,10 @@
   import { fallRate } from '../stores/fallRate.js'
   import nextPiece from '../stores/nextPiece.js'
   import { level } from '../stores/level.js'
+  import score from '../stores/score.js'
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board, nextPiece, level, lines })
+  setContext(TETRIS, { currentPiece, board, nextPiece, level, lines, score })
 
   // local variables
   const canvasWidth = COLS * BLOCK_SIZE
@@ -128,6 +129,7 @@
 
     if (numberOfClearedLines > 0) {
       // TODO: update score
+      score.updateScore(numberOfClearedLines, $level)
       lines.setLines($lines + numberOfClearedLines)
       board.clearCompletedLines()
     }
