@@ -22,7 +22,7 @@
 
 <Display>
   <div>
-    <span>Lines - {display}</span>
+    <span>Lines {display}</span>
   </div>
 </Display>
 
