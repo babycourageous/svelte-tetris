@@ -40,7 +40,7 @@
   import { level } from '../stores/level.js'
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board, nextPiece, level })
+  setContext(TETRIS, { currentPiece, board, nextPiece, level, lines })
 
   // local variables
   const canvasWidth = COLS * BLOCK_SIZE
