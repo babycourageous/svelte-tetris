@@ -1,19 +1,27 @@
 import {writable} from 'svelte/store'
 
-const initialState = 0
+import { LINE_POINTS } from '../constants'
 
-const linePoints = [40, 100, 300, 1200];
+const initialState = 0
 
 function createScore(initialValue) {
   const {subscribe, set, update} = writable(initialValue)
   return {
     subscribe,
     resetScore: () => set(0),
-    updateScore: (linesCleared, currentLevel) => update(prevScore => {
-      const basePoints = linePoints[linesCleared - 1]
-      const increase = basePoints * (currentLevel + 1)
-      return prevScore + increase
-    })
+    addPieceScore: piecePoints => {
+      console.log(piecePoints);
+      update(prevScore => prevScore + piecePoints)
+      
+    },
+    addClearedLineScore (linesCleared, currentLevel) {
+      update(prevScore => {
+        const linesPointIndex = linesCleared - 1
+        const basePoints = LINE_POINTS[linesPointIndex]
+        const increase = basePoints * (currentLevel + 1)
+        return prevScore + increase
+      })
+    },
   }
 }
 
