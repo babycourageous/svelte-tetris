@@ -5,7 +5,7 @@
 
   // helpers
   import { detectMatrixCollision, getFilledRows } from '../matrixHelpers'
-  import { times, shuffle } from '../utils'
+  import { shuffle } from '../utils'
 
   // components
   import Statistics from './Statistics.svelte'

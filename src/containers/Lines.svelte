@@ -8,6 +8,8 @@
 
   const zeroPaddingTotal = 3
 
+  $: display = padLines($lines)
+
   function padLines(currentLines) {
     // convert level number to string
     const lines = currentLines.toString()
@@ -16,8 +18,6 @@
     const spacePadStart = Math.floor((5 - lines.length) / 2) + lines.length
     return lines.padStart(zeroPaddingTotal, '0')
   }
-
-  $: display = padLines($lines)
 </script>
 
 <Display>

@@ -9,6 +9,8 @@
 
   const { level } = getContext(TETRIS)
 
+  $: display = padLevel($level)
+
   function padLevel(currentLevel) {
     // convert level number to string
     const level = currentLevel.toString()
@@ -20,8 +22,6 @@
       .padEnd(spacePadStart, ' ')
       .padStart(displayLength, ' ')
   }
-
-  $: display = padLevel($level)
 </script>
 
 <Display>
