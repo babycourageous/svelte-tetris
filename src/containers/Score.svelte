@@ -1,11 +1,18 @@
 <script>
+  import { getContext } from 'svelte'
+
+  import { TETRIS } from '../constants'
   import Display from '../components/Display.svelte'
+
+  const { score } = getContext(TETRIS)
+
+  $: display = $score.toString().padStart(6, '0')
 </script>
 
 <Display>
   <div class="scoreboard">
     <span>Score</span>
-    <span>000162</span>
+    <span>{display}</span>
   </div>
 </Display>
 

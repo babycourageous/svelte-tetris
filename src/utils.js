@@ -62,6 +62,13 @@ function lessThan(a, b) {
   return a < b
 }
 
+/**
+ * Shuffles an array in place
+ * - uses the modern version of the Fisher-Yates shuffle
+ *
+ * @param {Array} a The array to shuffle
+ * @returns {Array} The shuffled array
+ */
 function shuffle(a) {
   let counter = a.length;
 

@@ -6,6 +6,9 @@ export const TETRIS = {}
 export const START_LEVEL = 0
 export const NEW_LEVEL_EVERY = 10
 
+// Points
+export const LINE_POINTS = [40, 100, 300, 1200];
+
 // Key mappings
 export const DOWN_KEYS = ['down']
 export const LEFT_KEYS = ['left']

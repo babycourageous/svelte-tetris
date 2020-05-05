@@ -5,7 +5,7 @@
 
   // helpers
   import { detectMatrixCollision, getFilledRows } from '../matrixHelpers'
-  import { times, shuffle } from '../utils'
+  import { shuffle } from '../utils'
 
   // components
   import Statistics from './Statistics.svelte'
@@ -37,11 +37,11 @@
   import lines from '../stores/lines.js'
   import { fallRate } from '../stores/fallRate.js'
   import nextPiece from '../stores/nextPiece.js'
-
-  $: console.log('lines: ', $lines)
+  import { level } from '../stores/level.js'
+  import score from '../stores/score.js'
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board, nextPiece })
+  setContext(TETRIS, { currentPiece, board, nextPiece, level, lines, score })
 
   // local variables
   const canvasWidth = COLS * BLOCK_SIZE
@@ -58,6 +58,7 @@
   let timeSincePieceLastFell = 0
   let lastFrameTime = 0 // previous frame's current time
   let bag = []
+  let softDropCount = 0
 
   function createBag() {
     // make a bag
@@ -118,6 +119,10 @@
     const previousPositionPiece = klona($currentPiece)
     previousPositionPiece.y -= 1
     board.mergePieceIntoBoard(previousPositionPiece)
+    // add points equal to spaces DOWN was held
+    score.addPieceScore(softDropCount)
+    // reset the drop count
+    softDropCount = 0
   }
 
   /**
@@ -128,9 +133,10 @@
     const numberOfClearedLines = filledRows ? filledRows.length : 0
 
     if (numberOfClearedLines > 0) {
-      // TODO: update score
       lines.setLines($lines + numberOfClearedLines)
       board.clearCompletedLines()
+      // update score after any line and level updates
+      score.addClearedLineScore(numberOfClearedLines, $level)
     }
   }
 
@@ -194,10 +200,13 @@
         lastDownMove = currentTime
         timeSincePieceLastFell = 0
 
+        softDropCount += 1
+        // increase count for each space moved
         currentPiece.movePieceDown()
       }
     } else {
       lastDownMove = 0
+      softDropCount = 0
     }
 
     if (pressed.some(...ROTATE_LEFT_KEYS, ...ROTATE_RIGHT_KEYS)) {
