@@ -43,8 +43,8 @@ function drawHighlight(context, x, y, w, h) {
   context.beginPath()
   context.moveTo(x, y)
   context.lineTo(x + w, y)
-  context.lineTo(x + w - 2, y + h - 18)
-  context.lineTo(x + w - 18, y + 2)
+  context.lineTo(x + w - 2, y + 2)
+  context.lineTo(x + 2, y + 2)
   context.closePath()
   context.fillStyle = `rgba(255, 255, 255, .2)`
   context.fill()

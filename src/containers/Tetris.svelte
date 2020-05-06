@@ -39,9 +39,21 @@
   import nextPiece from '../stores/nextPiece.js'
   import { level } from '../stores/level.js'
   import score from '../stores/score.js'
+  import stats from '../stores/stats.js'
+
+  stats.setBaseStats(tetrominos)
 
   // initialize context
-  setContext(TETRIS, { currentPiece, board, nextPiece, level, lines, score })
+  setContext(TETRIS, {
+    currentPiece,
+    board,
+    nextPiece,
+    level,
+    lines,
+    score,
+    tetrominos,
+    stats,
+  })
 
   // local variables
   const canvasWidth = COLS * BLOCK_SIZE
@@ -81,6 +93,7 @@
   function makeNextPieceCurrent() {
     const spawnedPiece = centerPiece($nextPiece)
     currentPiece.setCurrentPiece(spawnedPiece)
+    stats.updateStats($currentPiece.id)
   }
 
   /**
@@ -272,7 +285,7 @@
   .game {
     max-width: 56rem;
     display: grid;
-    grid-template-columns: 220px auto 200px;
+    grid-template-columns: auto auto 200px;
   }
   section {
     display: flex;

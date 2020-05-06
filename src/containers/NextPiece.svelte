@@ -16,7 +16,12 @@
 <Display>
   <div>
     <span>Next</span>
-    <Piece {width} {height} piece={$nextPiece} />
+    <Piece
+      {width}
+      {height}
+      piece={$nextPiece}
+      xOffset={(4 - $nextPiece.matrix[0].length) / 2}
+      yOffset={1} />
   </div>
 </Display>
 

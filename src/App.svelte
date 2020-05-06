@@ -31,5 +31,6 @@
     display: flex;
     justify-content: center;
     padding: 1rem;
+    font-size: 0.75rem;
   }
 </style>

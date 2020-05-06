@@ -5,6 +5,9 @@
   export let piece
   export let width
   export let height
+  export let xOffset = 0
+  export let yOffset = 0
+  export let scale = 1
 
   let ref
   let ctx
@@ -12,16 +15,15 @@
   $: piece, drawCanvas(piece.matrix)
 
   function drawCanvas(matrix) {
-    if (matrix.length > 1) {
-      const x = (4 - matrix[0].length) / 2
-
+    if (ctx) {
       canvasHelper.clearCanvas(ctx, '#000000')
-      canvasHelper.drawMatrix(ctx, matrix, x, 1)
+      canvasHelper.drawMatrix(ctx, matrix, xOffset, yOffset)
     }
   }
 
   onMount(() => {
     ctx = ref.getContext('2d')
+    ctx.scale(scale, scale)
   })
 </script>
 
