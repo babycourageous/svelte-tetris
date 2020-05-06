@@ -10,7 +10,6 @@ function createScore(initialValue) {
     subscribe,
     resetScore: () => set(0),
     addPieceScore: piecePoints => {
-      console.log(piecePoints);
       update(prevScore => prevScore + piecePoints)
       
     },
