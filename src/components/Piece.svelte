@@ -7,6 +7,7 @@
   export let height
   export let xOffset = 0
   export let yOffset = 0
+  export let scale = 1
 
   let ref
   let ctx
@@ -22,6 +23,7 @@
 
   onMount(() => {
     ctx = ref.getContext('2d')
+    ctx.scale(scale, scale)
   })
 </script>
 
